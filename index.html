@@ -1,0 +1,1258 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Denetim Cebi · Kargo şubeleri için telefondan saha denetimi</title>
+<meta name="description" content="Denetim Cebi, kargo şubelerini denetleyenler için ücretsiz bir telefon uygulaması. Kontrol listesi, uygunsuzluk fotoğrafı, kasa sayımı, barkod, imza; Bitir'e basınca rapor metni, PDF ve Excel hazır. Veriler telefonda kalır, internetsiz çalışır.">
+<meta name="theme-color" content="#0a0c10">
+<link rel="icon" href="uygulama/icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="uygulama/icons/icon-192.png">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:site_name" content="Perabayt">
+<meta property="og:url" content="https://perabayt.github.io/denetim-cebi/">
+<meta property="og:title" content="Denetim Cebi · Denetimi şubede bitirin, rapor kapıda hazır">
+<meta property="og:description" content="Kargo şubeleri için ücretsiz saha denetim uygulaması: kontrol listesi, fotoğraf, kasa sayımı, barkod, imza; rapor, PDF ve Excel kendiliğinden. Veriler telefonda kalır.">
+<meta property="og:image" content="https://perabayt.github.io/denetim-cebi/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Denetim Cebi: telefonda kontrol paneli ve örnek bir şube denetim raporu">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Denetim Cebi · Denetimi şubede bitirin, rapor kapıda hazır">
+<meta name="twitter:description" content="Kargo şubeleri için ücretsiz saha denetim uygulaması. Veriler telefonda kalır, internetsiz çalışır.">
+<meta name="twitter:image" content="https://perabayt.github.io/denetim-cebi/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<script src="/_ortak/serit.js" defer></script>
+<script src="ornek-foto.js" defer></script>
+<style>
+:root{
+  --bg:#0a0c10; --bg2:#0d1015; --s1:#12151c; --s2:#171b23; --s3:#1f242e;
+  --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.11); --line3:rgba(255,255,255,.2);
+  --ink:#f2f4f7; --ink2:#a9b2c1; --ink3:#6f7889;
+  --tur:#ff5b1f; --tur2:#ff7d4b; --turA:rgba(255,91,31,.13);
+  --ok:#3ccb7f; --nok:#f97066; --warn:#fdb022;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --disp:"Bricolage Grotesque","Inter",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --w:1200px; --gut:32px;
+  --r2:14px; --r3:20px; --r4:28px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:76px;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--sans);letter-spacing:-.006em;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden;font-feature-settings:"cv11","ss01","ss03"}
+a{color:inherit}
+img{max-width:100%;display:block;height:auto}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.sar{max-width:var(--w);margin:0 auto;padding:0 var(--gut);position:relative}
+:focus-visible{outline:2px solid var(--tur2);outline-offset:3px;border-radius:8px}
+.gizli{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- üst çubuk ---------- */
+.ust{position:sticky;top:0;z-index:50;background:rgba(10,12,16,.74);backdrop-filter:saturate(160%) blur(16px);-webkit-backdrop-filter:saturate(160%) blur(16px);border-bottom:1px solid transparent;transition:border-color .3s}
+.ust.kaydi{border-bottom-color:var(--line)}
+.ust .sar{display:flex;align-items:center;gap:28px;height:62px}
+.marka{display:flex;align-items:center;gap:10px;text-decoration:none;font:700 16px/1 var(--disp);letter-spacing:-.02em;flex:none}
+.marka img{width:28px;height:28px;border-radius:8px}
+.marka small{font:500 10.5px/1 var(--mono);color:var(--ink3);border:1px solid var(--line2);border-radius:99px;padding:4px 7px;letter-spacing:.04em;text-transform:uppercase}
+.ust nav{display:flex;gap:2px;font-size:14px;color:var(--ink2);margin-right:auto}
+.ust nav a{text-decoration:none;padding:7px 11px;border-radius:8px;transition:color .2s,background .2s}
+.ust nav a:hover{color:var(--ink);background:rgba(255,255,255,.04)}
+.ust nav a.aktif{color:var(--ink)}
+
+/* ---------- düğmeler ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;height:48px;padding:0 20px;border-radius:12px;font:600 15px/1 var(--sans);letter-spacing:-.01em;text-decoration:none;border:1px solid var(--line2);background:rgba(255,255,255,.03);color:var(--ink);cursor:pointer;transition:background .2s,border-color .2s,transform .2s,box-shadow .2s;white-space:nowrap}
+.btn:hover{background:rgba(255,255,255,.07);border-color:var(--line3)}
+.btn .i{width:17px;height:17px;transition:transform .2s}
+.btn:hover .i.ok{transform:translateX(3px)}
+.btn.ana{background:var(--tur);border-color:var(--tur);color:#fff;box-shadow:0 10px 30px -10px rgba(255,91,31,.7),inset 0 1px 0 rgba(255,255,255,.22)}
+.btn.ana:hover{background:#ff6a32;border-color:#ff6a32}
+.btn.kucuk{height:36px;padding:0 14px;font-size:13.5px;border-radius:9px}
+
+/* ---------- ortak yazı ---------- */
+.kas{font:500 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--tur2);display:inline-flex;align-items:center;gap:10px}
+.kas::before{content:"";width:16px;height:1.5px;background:currentColor;border-radius:2px}
+h1,h2,h3,h4{margin:0;font-family:var(--disp);font-weight:700;letter-spacing:-.02em;font-variation-settings:"opsz" 36}
+h2{font-size:clamp(32px,4.2vw,54px);line-height:1.06;font-variation-settings:"opsz" 60;letter-spacing:-.025em;margin:18px 0 0;text-wrap:balance}
+h2 .sn{color:var(--ink3)}
+.bas{max-width:780px}
+.bas.orta{margin:0 auto;text-align:center}
+.bas.orta .kas::after{content:"";width:16px;height:1.5px;background:currentColor;border-radius:2px}
+.bas p{color:var(--ink2);font-size:18px;line-height:1.6;margin:20px 0 0;text-wrap:pretty}
+section{position:relative;padding:128px 0}
+.ayrac{border-top:1px solid var(--line)}
+.ornek{display:inline-flex;align-items:center;gap:6px;font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);border:1px dashed var(--line3);border-radius:6px;padding:5px 7px}
+
+/* ---------- telefon çerçevesi ---------- */
+:where(button.buyut){all:unset;display:block;cursor:zoom-in;box-sizing:border-box}
+:where(button.buyut):focus-visible{outline:2px solid var(--tur2);outline-offset:4px;border-radius:12px}
+.tel{display:block;position:relative;padding:9px;border-radius:50px;background:linear-gradient(160deg,#363c48 0%,#1a1e26 28%,#0f1217 70%,#2a2f39 100%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),inset 0 0 0 3px #07080b,0 0 0 1px rgba(0,0,0,.6),0 50px 90px -30px rgba(0,0,0,.95),0 30px 60px -40px rgba(255,91,31,.35)}
+.tel::before{content:"";position:absolute;right:-2px;top:22%;width:3px;height:9%;border-radius:0 2px 2px 0;background:#2a2f39}
+.tel::after{content:"";position:absolute;left:-2px;top:18%;width:3px;height:6%;border-radius:2px 0 0 2px;background:#2a2f39;box-shadow:0 70px 0 #2a2f39}
+.tel-ic{display:block;position:relative;border-radius:41px;overflow:hidden;background:#0a0c10;container-type:inline-size;isolation:isolate}
+.tel-durum{display:flex;align-items:center;justify-content:space-between;aspect-ratio:390/40;padding:0 7.5cqw 0 9cqw;font:600 3.9cqw/1 var(--sans);color:#f2f4f7;background:#0a0c10;letter-spacing:-.01em;position:relative}
+.tel-durum::after{content:"";position:absolute;left:50%;top:22%;width:23cqw;height:7.4cqw;transform:translateX(-50%);background:#000;border-radius:99px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+.tel-durum svg{height:3.2cqw;width:auto;fill:#f2f4f7}
+.tel-durum span:last-child{display:flex;gap:1.6cqw;align-items:center}
+.tel-ic > img{width:100%;aspect-ratio:390/844;object-fit:cover;object-position:top}
+.tel-ic .alt-cizgi{position:absolute;left:50%;bottom:1.6cqw;width:34cqw;height:1.3cqw;border-radius:99px;background:rgba(242,244,247,.55);transform:translateX(-50%);z-index:3;pointer-events:none}
+
+/* ---------- kahraman ---------- */
+.kahraman{position:relative;padding:48px 0 96px;overflow:hidden;isolation:isolate}
+.kahraman::before{content:"";position:absolute;inset:0;z-index:-1;background:
+  radial-gradient(42% 46% at 76% 34%,rgba(255,91,31,.20),transparent 70%),
+  radial-gradient(40% 40% at 8% 0%,rgba(80,110,170,.10),transparent 70%),
+  radial-gradient(circle at 1px 1px,rgba(255,255,255,.07) 1px,transparent 0) 0 0/28px 28px;
+  -webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent)}
+.k-izgara{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:56px;align-items:center}
+.rozet{display:inline-flex;align-items:center;gap:10px;padding:6px 14px 6px 6px;border-radius:99px;border:1px solid var(--line2);background:rgba(255,255,255,.03);font-size:13px;color:var(--ink2);text-decoration:none}
+.rozet b{font:600 10.5px/1 var(--mono);color:#fff;background:var(--tur);padding:5px 8px;border-radius:99px;letter-spacing:.06em;text-transform:uppercase}
+h1{font-size:clamp(44px,5.6vw,80px);line-height:1;letter-spacing:-.03em;margin:26px 0 0;font-weight:750;font-variation-settings:"opsz" 72;text-wrap:balance}
+h1 em{font-style:normal;color:var(--tur);position:relative;white-space:nowrap}
+.giris{font-size:clamp(17px,1.55vw,19.5px);line-height:1.6;color:var(--ink2);max-width:590px;margin:26px 0 0;text-wrap:pretty}
+.giris b{color:var(--ink);font-weight:600}
+.eylem{display:flex;gap:12px;flex-wrap:wrap;margin:34px 0 0}
+.alt-yazi{display:flex;flex-wrap:wrap;gap:8px 18px;margin:24px 0 0;padding:0;list-style:none;font-size:14px;color:var(--ink2)}
+.alt-yazi li{display:flex;align-items:center;gap:8px}
+.alt-yazi .i{width:16px;height:16px;color:var(--ok)}
+
+/* demo adımları */
+.adimlar{list-style:none;margin:34px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-width:600px;counter-reset:a}
+.adimlar li{counter-increment:a;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.015);font-size:13.5px;line-height:1.25;color:var(--ink3);transition:all .35s}
+.adimlar li::before{content:counter(a);flex:none;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;font:600 11.5px/1 var(--mono);background:var(--s2);color:var(--ink3);transition:all .35s}
+.adimlar li.gecti{color:var(--ink2)}
+.adimlar li.gecti::before{content:"✓";background:rgba(60,203,127,.14);color:var(--ok)}
+.adimlar li.simdi{color:var(--ink);border-color:rgba(255,91,31,.45);background:var(--turA)}
+.adimlar li.simdi::before{background:var(--tur);color:#fff}
+
+/* canlı telefon */
+.sahne{position:relative;display:flex;flex-direction:column;align-items:center}
+.sahne::before{content:"";position:absolute;width:80%;height:70%;top:12%;left:10%;background:radial-gradient(closest-side,rgba(255,91,31,.32),transparent);filter:blur(30px);z-index:-1}
+.sahne .tel{width:min(322px,100%)}
+.ekran{position:relative;width:100%;aspect-ratio:390/800;overflow:hidden;background:#0a0c10}
+.ekran iframe{position:absolute;left:0;top:0;width:390px;height:800px;border:0;transform-origin:0 0;background:#0a0c10;display:block}
+.parmak{position:absolute;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;z-index:4;pointer-events:none;opacity:0;background:rgba(255,255,255,.28);border:2px solid rgba(255,255,255,.85);box-shadow:0 4px 18px rgba(0,0,0,.5);transition:transform .7s cubic-bezier(.45,.05,.2,1),opacity .3s}
+.parmak.gor{opacity:1}
+.parmak.bas{animation:bas .42s ease-out}
+@keyframes bas{0%{scale:1}40%{scale:.72;background:rgba(255,91,31,.55)}100%{scale:1}}
+.ac-ortu{display:none;position:absolute;inset:0;z-index:5;align-items:flex-end;justify-content:center;padding-bottom:16px;text-decoration:none;background:linear-gradient(180deg,transparent 60%,rgba(10,12,16,.7))}
+.ac-ortu span{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 14px;border-radius:99px;background:rgba(242,244,247,.95);color:#0a0c10;font:600 13px/1 var(--sans);box-shadow:0 8px 24px rgba(0,0,0,.45)}
+.ac-ortu .i{width:14px;height:14px}
+.demo-cubuk{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:22px;min-height:36px}
+.durum{display:inline-flex;align-items:center;gap:10px;font-size:13.5px;color:var(--ink2)}
+.durum i{width:8px;height:8px;border-radius:50%;background:var(--ink3);flex:none}
+.durum[data-d="oynuyor"] i{background:var(--tur);animation:nabiz 1.6s infinite}
+.durum[data-d="sizde"] i,.durum[data-d="bitti"] i{background:var(--ok)}
+@keyframes nabiz{0%{box-shadow:0 0 0 0 rgba(255,91,31,.6)}70%{box-shadow:0 0 0 8px rgba(255,91,31,0)}100%{box-shadow:0 0 0 0 rgba(255,91,31,0)}}
+.demo-cubuk button,.demo-cubuk a{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;color:var(--ink);font-weight:500;font-size:13px;padding:7px 11px;border-radius:8px;border:1px solid var(--line2);white-space:nowrap}
+.demo-cubuk button:hover,.demo-cubuk a:hover{background:rgba(255,255,255,.05)}
+.demo-cubuk button:focus-visible,.demo-cubuk a:focus-visible{outline:2px solid var(--tur2);outline-offset:2px}
+.demo-cubuk button[hidden]{display:none}
+.demo-cubuk .i{width:14px;height:14px}
+.anlatim{display:none;margin:16px auto 0;font-size:14px;color:var(--ink2);text-align:center;min-height:22px}
+.anlatim b{color:var(--ink);font-weight:600}
+.dipnot{font-size:12.5px;line-height:1.55;color:var(--ink3);max-width:340px;margin:12px auto 0;text-align:center;text-wrap:pretty}
+.tel-ac{display:none}
+
+/* ---------- sorun → çözüm ---------- */
+.karsilastir{margin-top:64px;border:1px solid var(--line);border-radius:var(--r3);overflow:hidden;background:var(--bg2)}
+.k-bas,.k-satir{display:grid;grid-template-columns:200px 1fr 1fr}
+.k-bas{font:500 11.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);border-bottom:1px solid var(--line)}
+.k-bas div{padding:18px 26px}
+.k-bas div:last-child{color:var(--tur2);background:linear-gradient(90deg,rgba(255,91,31,.07),transparent)}
+.k-satir{border-bottom:1px solid var(--line)}
+.k-satir:last-child{border-bottom:0}
+.k-satir > div{padding:24px 26px;font-size:15.5px;line-height:1.55}
+.k-satir .konu{font:600 17px/1.3 var(--disp);letter-spacing:-.015em;display:flex;align-items:flex-start;gap:12px}
+.k-satir .konu .i{color:var(--ink3);margin-top:1px}
+.k-satir .once{color:var(--ink3);display:flex;gap:12px;border-left:1px solid var(--line)}
+.k-satir .once::before{content:"";flex:none;width:16px;height:16px;margin-top:3px;border-radius:50%;border:1.5px solid rgba(249,112,102,.55);background:linear-gradient(45deg,transparent 46%,rgba(249,112,102,.7) 46%,rgba(249,112,102,.7) 54%,transparent 54%)}
+.k-satir .sonra{color:var(--ink);display:flex;gap:12px;border-left:1px solid var(--line);background:linear-gradient(90deg,rgba(255,91,31,.045),transparent 70%)}
+.k-satir .sonra .i{width:18px;height:18px;color:var(--tur);margin-top:2px}
+
+/* ---------- özellik satırları ---------- */
+.satirlar{display:grid;gap:140px;margin-top:96px}
+.satir{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:80px;align-items:center}
+.satir.ters .metin{order:2}
+.satir .no{font:500 12px/1 var(--mono);color:var(--tur2);letter-spacing:.1em;display:flex;align-items:center;gap:12px}
+.satir .no em{font-style:normal;color:var(--ink3);text-transform:uppercase}
+.satir h3{font-size:clamp(28px,2.9vw,40px);line-height:1.08;margin:18px 0 0;text-wrap:balance}
+.satir p{color:var(--ink2);margin:18px 0 0;font-size:17px;text-wrap:pretty}
+.liste{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:13px}
+.liste li{display:grid;grid-template-columns:20px 1fr;gap:12px;color:var(--ink2);font-size:15.5px;line-height:1.55}
+.liste li .i{width:17px;height:17px;color:var(--ok);margin-top:3px}
+.liste li b{color:var(--ink);font-weight:600}
+.vitrin{position:relative;display:flex;justify-content:center;padding:40px 0}
+.vitrin::before{content:"";position:absolute;inset:0;border-radius:var(--r4);background:radial-gradient(70% 60% at 50% 45%,rgba(255,91,31,.14),transparent 70%),linear-gradient(180deg,var(--s1),var(--bg2));border:1px solid var(--line)}
+.vitrin .tel{width:300px}
+.vitrin button.buyut{all:unset;display:block;cursor:zoom-in;border-radius:50px}
+.vitrin button.buyut:focus-visible{outline:2px solid var(--tur2);outline-offset:6px}
+.not-kart{position:absolute;z-index:2;max-width:230px;padding:12px 14px;border-radius:13px;background:rgba(23,27,35,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line2);box-shadow:0 20px 40px -16px rgba(0,0,0,.8);font-size:13px;line-height:1.45;color:var(--ink2)}
+.not-kart b{display:block;color:var(--ink);font-weight:600;font-size:13.5px;margin-bottom:2px}
+.not-kart .damga{display:inline-block;font:500 10.5px/1 var(--mono);color:var(--tur2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:7px}
+.nk-sag{right:-14px;bottom:18%}
+.nk-sol{left:-14px;bottom:16%}
+.nk-sag-ust{right:-14px;top:14%}
+
+/* ---------- rapor ---------- */
+.rapor-izgara{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:28px;margin-top:72px;align-items:stretch}
+.rapor-tel{position:relative;border-radius:var(--r4);border:1px solid var(--line);background:linear-gradient(180deg,var(--s1),var(--bg2));padding:40px 24px 0;overflow:hidden;display:flex;flex-direction:column;align-items:center}
+.rapor-tel .tel{width:290px;margin-bottom:-120px}
+.rapor-tel .ust-yazi,.kagit-kutu .ust-yazi{align-self:stretch;margin-bottom:26px}
+.ust-yazi h3{font-size:22px;letter-spacing:-.02em}
+.ust-yazi p{margin:8px 0 0;color:var(--ink2);font-size:15px}
+.rapor-izgara > *,.cikti-yan > *{min-width:0}
+.cikti-yan{display:grid;grid-template-rows:auto auto;gap:28px}
+.kagit-kutu{border-radius:var(--r4);border:1px solid var(--line);background:linear-gradient(180deg,var(--s1),var(--bg2));padding:32px 32px 0;overflow:hidden;position:relative}
+.kagit{position:relative;height:430px;overflow:hidden;border-radius:10px 10px 0 0;background:#fff;box-shadow:0 30px 60px -20px rgba(0,0,0,.9);transform:rotate(-1.2deg) translateY(6px);transform-origin:50% 100%;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.kagit-kutu:hover .kagit{transform:rotate(0) translateY(0)}
+.kagit img{width:100%}
+.kagit::after{content:"";position:absolute;inset:auto 0 0;height:80px;background:linear-gradient(transparent,rgba(255,255,255,.95))}
+.kagit-kutu button.buyut{all:unset;display:block;cursor:zoom-in}
+.kagit-kutu button.buyut:focus-visible{outline:2px solid var(--tur2);outline-offset:4px;border-radius:10px}
+.excel{border-radius:var(--r4);border:1px solid var(--line);background:linear-gradient(180deg,var(--s1),var(--bg2));padding:28px 32px 30px}
+.sayfa{margin-top:20px;border-radius:10px;overflow:hidden;border:1px solid #2b3240;background:#0f1319;font-size:12.5px}
+.sayfa-cubuk{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#107c41;color:#fff;font:600 12px/1 var(--sans)}
+.sayfa-cubuk b{font:500 11.5px/1 var(--mono);opacity:.9;font-weight:500}
+.sayfa table{width:100%;border-collapse:collapse;table-layout:fixed}
+.sayfa th,.sayfa td{border-right:1px solid #252b36;border-bottom:1px solid #252b36;padding:7px 9px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#d5dae3}
+.sayfa th{background:#171c25;color:#8f99aa;font:500 10.5px/1.2 var(--mono);text-transform:uppercase;letter-spacing:.04em}
+.sayfa td.k{color:var(--nok);font-weight:600}
+.sayfa td.a{color:var(--warn)}
+.sekmeler{display:flex;gap:2px;padding:0 6px;background:#141820;overflow-x:auto;scrollbar-width:none}
+.sekmeler span{flex:none;font-size:11.5px;color:#8f99aa;padding:7px 10px;border-top:2px solid transparent}
+.sekmeler span.sec{color:#fff;border-top-color:#21a366;background:#0f1319}
+
+/* ---------- sonrası: bento ---------- */
+.bento{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;margin-top:72px}
+.kutu{position:relative;border-radius:var(--r3);border:1px solid var(--line);background:linear-gradient(180deg,var(--s1),var(--bg2));padding:28px;overflow:hidden;min-width:0}
+.kutu h3{font-size:21px;letter-spacing:-.02em;line-height:1.2}
+.kutu p{color:var(--ink2);font-size:15px;margin:10px 0 0;line-height:1.55;text-wrap:pretty}
+.kutu .etiket{font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--tur2);margin-bottom:14px;display:block}
+.b-bulgu{grid-column:span 6;grid-row:span 2;display:flex;flex-direction:column}
+.b-karne{grid-column:span 6;display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:24px;padding-bottom:0}
+.b-ozet{grid-column:span 6;display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:24px;padding-bottom:0}
+.b-aktar{grid-column:span 12;display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);gap:40px;align-items:center;padding:36px 0 0 36px}
+.kirpik{position:relative;margin-top:auto}
+.kirpik .tel{border-radius:40px 40px 0 0;padding-bottom:0}
+.kirpik .tel-ic{border-radius:32px 32px 0 0}
+.b-bulgu .kirpik{width:min(330px,100%);margin:28px auto -1px;height:440px;overflow:hidden}
+.b-karne .kirpik,.b-ozet .kirpik{height:290px;overflow:hidden;margin-top:0;align-self:end}
+.kirpik::after{content:"";position:absolute;inset:auto -10px 0;height:70px;background:linear-gradient(transparent,var(--bg2));z-index:3;pointer-events:none}
+.masa{border-radius:12px 0 0 0;overflow:hidden;border:1px solid var(--line2);border-right:0;border-bottom:0;box-shadow:0 30px 60px -20px rgba(0,0,0,.9);background:#0a0c10}
+.masa .cubuk{height:30px;display:flex;align-items:center;gap:7px;padding:0 12px;background:#141820;border-bottom:1px solid var(--line)}
+.masa .cubuk i{width:10px;height:10px;border-radius:50%;background:#2b313b}
+.masa .cubuk span{margin-left:12px;font:11px/1 var(--mono);color:var(--ink3)}
+.masa img{width:100%;aspect-ratio:1280/640;object-fit:cover;object-position:top left}
+.ok-cizgi{display:flex;align-items:center;gap:12px;margin-top:22px;font:500 12.5px/1 var(--mono);color:var(--ink2)}
+.ok-cizgi span{padding:8px 10px;border-radius:8px;border:1px solid var(--line2);background:rgba(255,255,255,.02)}
+.ok-cizgi i{flex:1;max-width:60px;height:1px;background:linear-gradient(90deg,var(--tur),transparent);position:relative}
+.kucukler{grid-column:span 12;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.kucukler .kutu{padding:22px 22px 24px}
+.kucukler .ik{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:var(--turA);color:var(--tur2);margin-bottom:16px}
+.kucukler h3{font-size:17px}
+.kucukler p{font-size:14px}
+
+/* ---------- zaman çizelgesi ---------- */
+.akis-izgara{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:72px;align-items:start}
+.akis-izgara .bas{position:sticky;top:110px}
+.zaman{list-style:none;margin:0;padding:0;position:relative}
+.zaman::before{content:"";position:absolute;left:80px;top:12px;bottom:12px;width:1px;background:linear-gradient(var(--line3),var(--line) 85%,transparent)}
+.zaman li{display:grid;grid-template-columns:56px 25px 1fr;gap:0 12px;padding:0 0 34px}
+.zaman li:last-child{padding-bottom:0}
+.zaman time{font:500 13px/1.2 var(--mono);color:var(--ink3);text-align:right;padding-top:5px}
+.zaman .nokta{position:relative;width:25px;display:flex;justify-content:center;padding-top:7px}
+.zaman .nokta i{width:11px;height:11px;border-radius:50%;background:var(--bg);border:2px solid var(--line3);position:relative;z-index:1}
+.zaman li.vurgu .nokta i{border-color:var(--tur);background:var(--tur);box-shadow:0 0 0 5px rgba(255,91,31,.15)}
+.zaman .icerik{padding:0 0 0 6px}
+.zaman h3{font-size:19px;letter-spacing:-.015em;line-height:1.3}
+.zaman p{margin:6px 0 0;color:var(--ink2);font-size:15px;line-height:1.55}
+.damgalar{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.damgalar span{font:500 11.5px/1 var(--mono);padding:6px 8px;border-radius:6px;background:rgba(255,255,255,.035);border:1px solid var(--line2);color:var(--ink2)}
+.damgalar span.k{color:var(--nok);border-color:rgba(249,112,102,.3);background:rgba(249,112,102,.06)}
+.damgalar span.o{color:var(--ok);border-color:rgba(60,203,127,.3);background:rgba(60,203,127,.06)}
+.damgalar span.t{color:var(--tur2);border-color:rgba(255,91,31,.35);background:var(--turA)}
+
+/* ---------- gizlilik ---------- */
+.ilkeler{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;margin-top:64px;border-radius:var(--r3);overflow:hidden;border:1px solid var(--line);background:var(--line)}
+.ilke{background:var(--bg2);padding:30px 26px;display:flex;flex-direction:column}
+.ilke .ik{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;border:1px solid var(--line2);color:var(--tur2);background:var(--turA)}
+.ilke h3{font-size:19px;letter-spacing:-.02em;margin:22px 0 0}
+.ilke p{color:var(--ink2);font-size:15px;margin:10px 0 0;line-height:1.55}
+.ilke .kanit{margin-top:auto;padding-top:20px}
+.ilke .kanit span{display:block;font:400 11.5px/1.55 var(--mono);color:var(--ink3);border-top:1px dashed var(--line2);padding-top:14px}
+.ilke .kanit span::before{content:"Kodda  ";color:var(--tur2);white-space:pre}
+.durust{display:flex;gap:14px;align-items:flex-start;margin-top:20px;padding:18px 20px;border-radius:var(--r2);border:1px solid rgba(253,176,34,.22);background:rgba(253,176,34,.05);font-size:14.5px;color:var(--ink2);line-height:1.55}
+.durust .i{color:var(--warn);margin-top:1px}
+.durust b{color:var(--ink);font-weight:600}
+
+/* ---------- SSS ---------- */
+.sss{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:72px;align-items:start}
+.sss .bas{position:sticky;top:110px}
+.soru{border-bottom:1px solid var(--line)}
+.soru:first-child{border-top:1px solid var(--line)}
+.soru summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 2px;font:600 18px/1.35 var(--disp);letter-spacing:-.015em}
+.soru summary::-webkit-details-marker{display:none}
+.soru summary i{position:relative;width:16px;height:16px;flex:none;color:var(--ink3)}
+.soru summary i::before,.soru summary i::after{content:"";position:absolute;left:0;right:0;top:7.25px;height:1.5px;background:currentColor;border-radius:2px;transition:transform .25s}
+.soru summary i::after{transform:rotate(90deg)}
+.soru[open] summary i::after{transform:rotate(0)}
+.soru[open] summary i{color:var(--tur2)}
+.soru summary:hover i{color:var(--ink)}
+.soru .cevap{padding:0 40px 24px 2px;color:var(--ink2);font-size:15.5px;line-height:1.65}
+.soru .cevap p{margin:0 0 10px}
+.soru .cevap p:last-child{margin:0}
+.soru .cevap b{color:var(--ink);font-weight:600}
+
+/* ---------- kapanış ---------- */
+.kapanis{padding:0 0 120px}
+.bant{position:relative;overflow:hidden;border-radius:32px;border:1px solid rgba(255,91,31,.25);padding:92px 40px;text-align:center;isolation:isolate;background:
+  radial-gradient(60% 90% at 50% 0%,rgba(255,91,31,.28),transparent 70%),
+  linear-gradient(180deg,#14161c,var(--bg2))}
+.bant::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at 1px 1px,rgba(255,255,255,.08) 1px,transparent 0) 0 0/24px 24px;-webkit-mask-image:radial-gradient(60% 80% at 50% 0%,#000,transparent);mask-image:radial-gradient(60% 80% at 50% 0%,#000,transparent)}
+.bant img{width:64px;height:64px;border-radius:16px;margin:0 auto;box-shadow:0 16px 40px -10px rgba(255,91,31,.5)}
+.bant h2{font-size:clamp(32px,4.6vw,58px);margin:28px auto 0;max-width:840px}
+.bant p{color:var(--ink2);font-size:18px;max-width:640px;margin:20px auto 0;text-wrap:pretty}
+.bant .eylem{justify-content:center;margin-top:36px}
+
+footer{border-top:1px solid var(--line);padding:36px 0 52px}
+footer .sar{display:flex;justify-content:space-between;align-items:center;gap:20px 32px;flex-wrap:wrap}
+footer .imza{display:flex;align-items:center;gap:14px;font-size:14px;color:var(--ink2)}
+footer .imza img{width:30px;height:30px;border-radius:8px}
+footer .imza b{display:block;color:var(--ink);font-weight:600}
+footer nav{display:flex;gap:22px;flex-wrap:wrap;font-size:14px;color:var(--ink2)}
+footer nav a{text-decoration:none}
+footer nav a:hover{color:var(--ink)}
+
+/* ---------- büyük görüntü ---------- */
+dialog{border:0;padding:0;background:transparent;max-width:min(94vw,1100px);max-height:94vh;color:var(--ink);overflow:visible}
+dialog::backdrop{background:rgba(5,6,8,.9);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+dialog .kutu-g{max-height:86vh;overflow:auto;border-radius:16px}
+dialog img{max-height:86vh;width:auto;max-width:100%;margin:0 auto;border-radius:16px}
+dialog img.uzun{max-height:none;width:min(820px,90vw)}
+dialog p{color:var(--ink2);text-align:center;margin:14px 0 0;font-size:14px}
+dialog .kapat{position:fixed;top:16px;right:18px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line2);background:rgba(255,255,255,.07);color:var(--ink);cursor:pointer;display:grid;place-items:center}
+dialog .kapat .i{width:18px;height:18px}
+
+/* ---------- hareket (içerik durağanken de görünür) ---------- */
+@media (prefers-reduced-motion:no-preference){
+  .js .belir{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
+  .js .belir.gorundu{opacity:1;transform:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important;animation:none!important}
+  html{scroll-behavior:auto}
+}
+
+/* ---------- duyarlı ---------- */
+@media (max-width:1100px){
+  .ust nav{display:none}
+  .ust .sar{justify-content:space-between}
+  .k-izgara{grid-template-columns:minmax(0,1fr) 330px;gap:40px}
+  .adimlar{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .satir{gap:48px}
+  .bento .b-bulgu,.bento .b-karne,.bento .b-ozet{grid-column:span 12}
+  .b-bulgu{display:grid;grid-template-columns:1fr 300px;gap:28px;padding-bottom:0}
+  .b-bulgu .kirpik{margin:0;align-self:end;height:340px}
+  .kucukler{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ilkeler{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .akis-izgara,.sss{grid-template-columns:1fr;gap:48px}
+  .akis-izgara .bas,.sss .bas{position:static}
+  .rapor-izgara{grid-template-columns:1fr}
+  .rapor-tel{flex-direction:row;align-items:flex-start;gap:32px;padding:36px 36px 0}
+  .rapor-tel .ust-yazi{flex:1;align-self:center}
+  .rapor-tel .tel{margin-bottom:-160px;flex:none;width:260px}
+}
+@media (max-width:860px){
+  .k-izgara{grid-template-columns:1fr;gap:48px}
+  .k-metin{text-align:center}
+  .giris{margin-left:auto;margin-right:auto}
+  .eylem,.alt-yazi{justify-content:center}
+  .adimlar{display:none}
+  .anlatim{display:block}
+  .satir,.satir.ters{grid-template-columns:1fr;gap:40px}
+  .satir.ters .metin{order:0}
+  .k-bas{display:none}
+  .k-satir{grid-template-columns:1fr}
+  .k-satir > div{padding:0 22px}
+  .k-satir .konu{padding-top:22px}
+  .k-satir .once{border-left:0;margin-top:12px}
+  .k-satir .sonra{border-left:0;background:none;margin-top:10px;padding-bottom:22px}
+  .b-aktar{grid-template-columns:1fr;padding:28px 0 0 28px;gap:24px}
+  .b-aktar .metin{padding-right:28px}
+}
+@media (max-width:640px){
+  :root{--gut:20px}
+  section{padding:88px 0}
+  .ust .sar{height:58px}
+  .marka small{display:none}
+  .ust .btn.kucuk{height:34px;padding:0 12px}
+  .kahraman{padding:44px 0 72px}
+  h1{font-size:clamp(38px,11.4vw,52px);margin-top:22px}
+  .giris{font-size:16.5px;margin-top:20px}
+  .eylem{flex-direction:column;align-items:stretch;gap:10px;margin-top:28px}
+  .eylem .btn{height:52px}
+  .alt-yazi{font-size:13px;gap:6px 14px}
+  .sahne .tel{width:280px}
+  .ekran iframe{pointer-events:none}
+  .ac-ortu{display:flex}
+  .tel-ac{display:flex;margin:22px auto 0;width:100%;max-width:340px;height:54px;font-size:16px}
+  .demo-cubuk{margin-top:16px}
+  .bas p{font-size:16.5px}
+  .karsilastir,.bento,.ilkeler{margin-top:44px}
+  .satirlar{gap:96px;margin-top:64px}
+  .satir p{font-size:16px}
+  .vitrin{padding:28px 0}
+  .vitrin .tel{width:250px}
+  .not-kart{position:relative;inset:auto;max-width:none;margin:14px 16px 0}
+  .vitrin{flex-direction:column;align-items:center}
+  .vitrin .not-kart{align-self:stretch}
+  .rapor-izgara{margin-top:48px;gap:16px}
+  .rapor-tel{flex-direction:column;align-items:center;padding:28px 22px 0}
+  .rapor-tel .tel{width:250px;margin-bottom:-110px}
+  .kagit-kutu{padding:24px 20px 0}
+  .kagit{height:320px}
+  .excel{padding:22px 18px 22px}
+  .sayfa th:nth-child(2),.sayfa td:nth-child(2),.sayfa th:nth-child(5),.sayfa td:nth-child(5){display:none}
+  .bento{gap:12px}
+  .kutu{padding:22px}
+  .b-bulgu,.b-karne,.b-ozet{grid-template-columns:1fr}
+  .b-bulgu .kirpik{width:260px;margin:4px auto 0;height:300px}
+  .b-karne .kirpik,.b-ozet .kirpik{width:260px;margin:0 auto;height:230px}
+  .b-aktar{padding:24px 0 0 22px}
+  .ok-cizgi{flex-wrap:wrap}
+  .kucukler{grid-template-columns:1fr 1fr;gap:12px}
+  .kucukler .kutu{padding:18px 16px 20px}
+  .kucukler .ik{margin-bottom:12px}
+  .kucukler p{font-size:13.5px}
+  #tam-ekran{display:none}
+  .ilkeler{grid-template-columns:1fr}
+  .zaman::before{left:66px}
+  .zaman li{grid-template-columns:44px 25px 1fr;gap:0 10px}
+  .zaman time{font-size:12px}
+  .soru summary{font-size:16.5px;padding:20px 2px}
+  .soru .cevap{padding-right:6px}
+  .kapanis{padding-bottom:88px}
+  .bant{padding:60px 22px;border-radius:22px}
+  .bant p{font-size:16.5px}
+  footer .sar{flex-direction:column;align-items:flex-start}
+}
+@media (max-width:380px){
+  .sahne .tel{width:260px}
+}
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add("js")</script>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-ok" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-dis" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol>
+  <symbol id="i-tik" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-yenile" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 2.6-6.4L3 8"/><path d="M3 3v5h5"/></symbol>
+  <symbol id="i-oynat" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z"/></symbol>
+  <symbol id="i-genis" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></symbol>
+  <symbol id="i-liste" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2.5"/><path d="M9 2.8h6M8.5 10.5l1.5 1.5 3-3M8.5 16h7"/></symbol>
+  <symbol id="i-kamera" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-para" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6.5 9.5v5M17.5 9.5v5"/></symbol>
+  <symbol id="i-barkod" viewBox="0 0 24 24"><path d="M4 6v12M7 6v12M10.5 6v12M13 6v12M16.5 6v12M20 6v12"/></symbol>
+  <symbol id="i-rapor" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></symbol>
+  <symbol id="i-bayrak" viewBox="0 0 24 24"><path d="M5 21V4h11l-2 4 2 4H5"/></symbol>
+  <symbol id="i-kilit" viewBox="0 0 24 24"><rect x="4.5" y="11" width="15" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-bulut" viewBox="0 0 24 24"><path d="m3 3 18 18M8 18h9a4 4 0 0 0 1.2-7.8M5.7 8.6A5 5 0 0 0 7 18"/><path d="M10.5 6.2a6 6 0 0 1 6.4 3.1"/></symbol>
+  <symbol id="i-kisi" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M5 20a7 7 0 0 1 14 0"/><path d="m4 4 16 16"/></symbol>
+  <symbol id="i-paylas" viewBox="0 0 24 24"><path d="M12 15V3M7.5 7.5 12 3l4.5 4.5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></symbol>
+  <symbol id="i-konum" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+  <symbol id="i-yazi" viewBox="0 0 24 24"><path d="M4 19 9 5l5 14M5.8 14h6.4M15 19l3-8 3 8M15.9 16.6h4.2"/></symbol>
+  <symbol id="i-tablo" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M3.5 14.5h17M9.5 9.5v10"/></symbol>
+  <symbol id="i-indir" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19h14"/></symbol>
+  <symbol id="i-uyari" viewBox="0 0 24 24"><path d="M12 4 2.8 19.5h18.4z"/><path d="M12 10v4.5M12 17.2h.01"/></symbol>
+  <symbol id="i-sinyal" viewBox="0 0 34 12"><rect x="0" y="8" width="5" height="4" rx="1"/><rect x="7" y="5.5" width="5" height="6.5" rx="1"/><rect x="14" y="3" width="5" height="9" rx="1"/><rect x="21" y="0" width="5" height="12" rx="1"/></symbol>
+  <symbol id="i-pil" viewBox="0 0 26 12"><rect x=".7" y=".7" width="21.6" height="10.6" rx="3" fill="none" stroke="#f2f4f7" stroke-opacity=".5" stroke-width="1.2"/><rect x="2.4" y="2.4" width="15" height="7.2" rx="1.6"/><rect x="23.4" y="3.8" width="1.8" height="4.4" rx=".9" fill-opacity=".5"/></symbol>
+</svg>
+
+<header class="ust" id="ust">
+  <div class="sar">
+    <a class="marka" href="#"><img src="uygulama/icons/icon.svg" alt="" width="28" height="28">Denetim Cebi <small>Konsept</small></a>
+    <nav aria-label="Sayfa içi">
+      <a href="#neden">Neden</a><a href="#ozellikler">Özellikler</a><a href="#rapor">Rapor</a><a href="#akis">Bir denetim</a><a href="#gizlilik">Gizlilik</a><a href="#sss">SSS</a>
+    </nav>
+    <a class="btn kucuk ana" href="uygulama/">Uygulamayı aç</a>
+  </div>
+</header>
+
+<main>
+<!-- ============ KAHRAMAN ============ -->
+<div class="kahraman" id="canli">
+  <div class="sar k-izgara">
+    <div class="k-metin">
+      <a class="rozet" href="#gizlilik"><b>Ücretsiz</b>Kargo şubeleri için saha denetimi</a>
+      <h1>Denetimi şubede bitirin. Rapor <em>kapıda hazır.</em></h1>
+      <p class="giris">Denetim Cebi, kargo şubelerini denetleyenler için bir telefon uygulaması. Kontrol listesini işaretleyin, uygunsuzluğu fotoğraflayın, kasayı sayın. <b>Bitir'e bastığınızda rapor metni, PDF ve Excel hazır olur.</b> Kayıtlar telefonda kalır.</p>
+      <div class="eylem">
+        <a class="btn ana" href="uygulama/">Uygulamayı dene <svg class="i ok"><use href="#i-ok"/></svg></a>
+        <a class="btn" href="#akis">Nasıl çalışır</a>
+      </div>
+      <ul class="alt-yazi">
+        <li><svg class="i"><use href="#i-tik"/></svg>Hesap ve kurulum yok</li>
+        <li><svg class="i"><use href="#i-tik"/></svg>İnternet olmadan çalışır</li>
+        <li><svg class="i"><use href="#i-tik"/></svg>Veriler telefonda kalır</li>
+      </ul>
+      <ol class="adimlar" id="adimlar" aria-label="Tanıtımın adımları">
+        <li>Örnek şubeler</li>
+        <li>Denetimi başlat</li>
+        <li>Kontrol listesi</li>
+        <li>Fotoğraf ve not</li>
+        <li>Kasa sayımı</li>
+        <li>Rapor ve imza</li>
+      </ol>
+    </div>
+
+    <div class="sahne">
+      <div class="tel">
+        <div class="tel-ic">
+          <div class="tel-durum" aria-hidden="true"><span>09:41</span><span><svg viewBox="0 0 26 12"><use href="#i-sinyal"/></svg><svg viewBox="0 0 26 12"><use href="#i-pil"/></svg></span></div>
+          <div class="ekran" id="ekran">
+            <iframe id="uyg" title="Denetim Cebi uygulaması, örnek veriyle canlı tanıtım" loading="eager"></iframe>
+            <span class="parmak" id="parmak" aria-hidden="true"></span>
+            <a class="ac-ortu" href="uygulama/?tanitim" target="_blank" rel="noopener"><span>Tam ekranda dene <svg class="i"><use href="#i-dis"/></svg></span></a>
+          </div>
+          <span class="alt-cizgi" aria-hidden="true"></span>
+        </div>
+      </div>
+      <p class="anlatim" id="anlatim" aria-hidden="true"></p>
+      <div class="demo-cubuk">
+        <div class="durum" id="durum" data-d="hazir" role="status" aria-live="polite"><i></i><span id="durum-yazi">Canlı uygulama · örnek veri</span></div>
+        <button type="button" id="durum-dugme" hidden></button>
+        <a href="uygulama/?tanitim" target="_blank" rel="noopener" id="tam-ekran"><svg class="i"><use href="#i-genis"/></svg>Tam ekran</a>
+      </div>
+      <a class="btn ana tel-ac" href="uygulama/">Uygulamayı aç <svg class="i ok"><use href="#i-ok"/></svg></a>
+      <p class="dipnot">Bu çerçevedeki uygulama gerçektir; şubeler ve denetimler örnektir. Tanıtım kayıtları ayrı tutulur, kendi denetimlerinize karışmaz.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ NEDEN ============ -->
+<section id="neden" class="ayrac">
+  <div class="sar">
+    <div class="bas belir">
+      <span class="kas">Saha denetimi bugün</span>
+      <h2>Kâğıt form, WhatsApp'ta fotoğraf, akşam Excel'i. <span class="sn">Denetim üç kez yazılıyor.</span></h2>
+      <p>Denetçi şubede formu doldurur, fotoğrafları telefondan bir yere atar, ofise dönünce hepsini bilgisayarda yeniden yazar. Bulguların takibi de bir sonraki ziyarete kalır. Denetim Cebi bu işi tek bir yerde, şubedeyken bitirir.</p>
+    </div>
+    <div class="karsilastir belir" role="table" aria-label="Önce ve Denetim Cebi ile">
+      <div class="k-bas" role="row"><div role="columnheader">İş</div><div role="columnheader">Bugün</div><div role="columnheader">Denetim Cebi ile</div></div>
+      <div class="k-satir" role="row">
+        <div class="konu" role="cell"><svg class="i"><use href="#i-liste"/></svg>Kontrol listesi</div>
+        <div class="once" role="cell">Kâğıt form sahada doldurulur, ofiste bilgisayara geçirilir.</div>
+        <div class="sonra" role="cell"><svg class="i"><use href="#i-tik"/></svg><span>Liste telefonda. Her madde tek dokunuşla: uygun, uygun değil, yok. Puan o anda hesaplanır.</span></div>
+      </div>
+      <div class="k-satir" role="row">
+        <div class="konu" role="cell"><svg class="i"><use href="#i-kamera"/></svg>Fotoğraf ve not</div>
+        <div class="once" role="cell">Fotoğraflar sohbetlerde kaybolur, hangisinin hangi maddeye ait olduğu unutulur.</div>
+        <div class="sonra" role="cell"><svg class="i"><use href="#i-tik"/></svg><span>Fotoğraf maddeye bağlanır, üzerine tarih, saat ve şube adı basılır. Not sesle de yazılır.</span></div>
+      </div>
+      <div class="k-satir" role="row">
+        <div class="konu" role="cell"><svg class="i"><use href="#i-para"/></svg>Kasa sayımı</div>
+        <div class="once" role="cell">Ayrı bir kâğıtta sayılır, fark elle hesaplanır.</div>
+        <div class="sonra" role="cell"><svg class="i"><use href="#i-tik"/></svg><span>Kupür adetleri yazılır; toplam ve fark hesaplanır, fark kasa maddesine kendiliğinden işlenir.</span></div>
+      </div>
+      <div class="k-satir" role="row">
+        <div class="konu" role="cell"><svg class="i"><use href="#i-rapor"/></svg>Rapor</div>
+        <div class="once" role="cell">Akşam Word ya da Excel'de baştan yazılır.</div>
+        <div class="sonra" role="cell"><svg class="i"><use href="#i-tik"/></svg><span>Bitir'e basınca rapor metni, başlık puanları, PDF ve Excel hazırlanır. Şube sorumlusu ekrana imza atar.</span></div>
+      </div>
+      <div class="k-satir" role="row">
+        <div class="konu" role="cell"><svg class="i"><use href="#i-bayrak"/></svg>Bulgu takibi</div>
+        <div class="once" role="cell">Bir sonraki ziyarette hatırlanırsa sorulur.</div>
+        <div class="sonra" role="cell"><svg class="i"><use href="#i-tik"/></svg><span>Her bulgu termin tarihiyle takibe girer. Sonraki denetimde uygun çıkarsa kendiliğinden kapanır.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ÖZELLİKLER ============ -->
+<section id="ozellikler" class="ayrac">
+  <div class="sar">
+    <div class="bas orta belir">
+      <span class="kas">Şubedeyken</span>
+      <h2>Bir elde telefon, öbür elde hiçbir şey.</h2>
+      <p>Bütün ekranlar uygulamanın kendisinden, örnek veriyle alındı. Büyütmek için dokunun.</p>
+    </div>
+
+    <div class="satirlar">
+      <div class="satir">
+        <div class="metin belir">
+          <span class="no">01 <em>Kontrol listesi</em></span>
+          <h3>38 maddelik şube listesi, dokunarak ilerler.</h3>
+          <p>Üç hazır denetim türü gelir: şube, aktarma merkezi, araç ve kurye. Her türün kendi listesi ve bilgi alanları var: personel sayısı, plaka, kilometre gibi.</p>
+          <ul class="liste">
+            <li><svg class="i"><use href="#i-tik"/></svg><span>Maddeler <b>kritik, önemli, düşük</b> olarak ağırlıklıdır; puan siz işaretledikçe değişir.</span></li>
+            <li><svg class="i"><use href="#i-tik"/></svg><span>Sorunsuz başlıklar <b>“Kalanı uygun”</b> ile tek dokunuşta geçilir.</span></li>
+            <li><svg class="i"><use href="#i-tik"/></svg><span>Önceki denetimde uygunsuz çıkan maddeler <b>turuncu</b> işaretli gelir.</span></li>
+            <li><svg class="i"><use href="#i-tik"/></svg><span>Liste kendi Excel'inizden yüklenebilir (Kategori, Madde, Önem sütunları).</span></li>
+          </ul>
+        </div>
+        <div class="vitrin belir">
+          <button class="buyut" type="button" data-buyuk="ekran/liste.webp" data-ad="Kontrol listesi · Kadıköy Şube (örnek)">
+            <span class="tel"><span class="tel-ic"><span class="tel-durum" aria-hidden="true"><span>09:34</span><span><svg viewBox="0 0 26 12"><use href="#i-sinyal"/></svg><svg viewBox="0 0 26 12"><use href="#i-pil"/></svg></span></span><img src="ekran/liste.webp" alt="Kontrol listesi ekranı: madde madde Uygun, Uygun değil, Yok seçenekleri ve canlı puan" width="780" height="1688" loading="lazy"></span></span>
+          </button>
+          <div class="not-kart nk-sag"><span class="damga">Canlı puan</span><b>İşaretledikçe hesaplanır</b>Kaç madde kaldığı, bulgu sayısı ve geçen süre üstte durur.</div>
+        </div>
+      </div>
+
+      <div class="satir ters">
+        <div class="metin belir">
+          <span class="no">02 <em>Uygunsuzluk</em></span>
+          <h3>Fotoğrafı çekin, notu söyleyin, termin kendiliğinden gelsin.</h3>
+          <p>“Uygun değil”e dokunduğunuzda madde açılır. Fotoğraf doğrudan o maddeye eklenir; köşesine tarih, saat ve şube adı basılır. Gerekirse üzerine kırmızı kalemle işaret konur.</p>
+          <ul class="liste">
+            <li><svg class="i"><use href="#i-tik"/></svg><span>Not <b>mikrofona söylenerek</b> yazılır (destekleyen telefonlarda) ya da hazır notlardan seçilir.</span></li>
+            <li><svg class="i"><use href="#i-tik"/></svg><span>Uygulama sizin önceki notlarınızdan öğrenir, sık yazdıklarınızı öne çıkarır.</span></li>
+            <li><svg class="i"><use href="#i-tik"/></svg><span>Termin önem derecesine göre gelir: <b>kritik 3, önemli 7, düşük 15 gün</b>. İsterseniz değiştirirsiniz.</span></li>
+          </ul>
+        </div>
+        <div class="vitrin belir">
+          <button class="buyut" type="button" data-buyuk="ekran/bulgu.webp" data-ad="Uygunsuz madde: not, hazır notlar, damgalı fotoğraf ve termin (örnek)">
+            <span class="tel"><span class="tel-ic"><span class="tel-durum" aria-hidden="true"><span>09:52</span><span><svg viewBox="0 0 26 12"><use href="#i-sinyal"/></svg><svg viewBox="0 0 26 12"><use href="#i-pil"/></svg></span></span><img src="ekran/bulgu.webp" alt="Uygun değil işaretlenmiş acil çıkış maddesi: yazılmış not, hazır not düğmeleri, damgalı fotoğraf ve termin tarihi" width="780" height="1688" loading="lazy"></span></span>
+          </button>
+          <div class="not-kart nk-sol"><span class="damga">Fotoğraf damgası</span><b>Kanıt maddenin yanında</b>Tarih, saat ve şube adı fotoğrafın köşesine basılır.</div>
+        </div>
+      </div>
+
+      <div class="satir">
+        <div class="metin belir">
+          <span class="no">03 <em>Kasa sayımı</em></span>
+          <h3>Kupürleri sayın, farkı uygulama bulsun.</h3>
+          <p>Her banknottan kaç adet olduğunu yazarsınız; toplam o anda çıkar. Sistemde görünen tutarı girince fark hesaplanır.</p>
+          <ul class="liste">
+            <li><svg class="i"><use href="#i-tik"/></svg><span>Fark varsa <b>“Gün sonu kasa sayımı” maddesine kendiliğinden işlenir</b>, rapora tutarıyla girer.</span></li>
+            <li><svg class="i"><use href="#i-tik"/></svg><span>Bozuk para ve not alanı ayrı; Excel dosyasında kendi sayfası var.</span></li>
+          </ul>
+        </div>
+        <div class="vitrin belir">
+          <button class="buyut" type="button" data-buyuk="ekran/kasa.webp" data-ad="Kasa sayımı: kupür adetleri, sayılan toplam ve fark (örnek)">
+            <span class="tel"><span class="tel-ic"><span class="tel-durum" aria-hidden="true"><span>10:05</span><span><svg viewBox="0 0 26 12"><use href="#i-sinyal"/></svg><svg viewBox="0 0 26 12"><use href="#i-pil"/></svg></span></span><img src="ekran/kasa.webp" alt="Kasa sayımı ekranı: kupür adetleri, sayılan toplam 10.597,50 TL ve 40 TL eksik uyarısı" width="780" height="1688" loading="lazy"></span></span>
+          </button>
+          <div class="not-kart nk-sag"><span class="damga">Örnek</span><b>₺40,00 eksik</b>Fark kasa maddesine bulgu olarak geçti.</div>
+        </div>
+      </div>
+
+      <div class="satir ters">
+        <div class="metin belir">
+          <span class="no">04 <em>Gönderi kontrolü</em></span>
+          <h3>Depodan rastgele gönderi seçin, barkodu okutun.</h3>
+          <p>Barkod, destekleyen telefonlarda (Android'de Chrome) kamerayla okunur; diğerlerinde numara yazılır. Sorunlu gönderinin durumu tek seçimle değişir.</p>
+          <ul class="liste">
+            <li><svg class="i"><use href="#i-tik"/></svg><span>Durumlar: <b>uygun, yanlış statü, hasarlı</b> ve diğerleri; her birine not eklenir.</span></li>
+            <li><svg class="i"><use href="#i-tik"/></svg><span>Aynı gönderi iki kez eklenmez; okutma saati kaydedilir.</span></li>
+            <li><svg class="i"><use href="#i-tik"/></svg><span>Sonuç rapora tek cümle olarak girer: kaç gönderi, kaçında sorun.</span></li>
+          </ul>
+        </div>
+        <div class="vitrin belir">
+          <button class="buyut" type="button" data-buyuk="ekran/gonderi.webp" data-ad="Gönderi kontrolü: barkod numaraları ve durumları (örnek)">
+            <span class="tel"><span class="tel-ic"><span class="tel-durum" aria-hidden="true"><span>10:12</span><span><svg viewBox="0 0 26 12"><use href="#i-sinyal"/></svg><svg viewBox="0 0 26 12"><use href="#i-pil"/></svg></span></span><img src="ekran/gonderi.webp" alt="Gönderi kontrolü ekranı: beş gönderi, biri hasarlı olarak işaretlenmiş ve notlu" width="780" height="1688" loading="lazy"></span></span>
+          </button>
+          <div class="not-kart nk-sol"><span class="damga">5 gönderi</span><b>1 sorunlu</b>“Köşesi ezik, tutanak tutulmamış”</div>
+        </div>
+      </div>
+
+      <div class="satir">
+        <div class="metin belir">
+          <span class="no">05 <em>İmza</em></span>
+          <h3>Şube sorumlusu ekrana imza atar.</h3>
+          <p>Denetim bitince şube sorumlusu parmağıyla imzalar; imza PDF'te adıyla birlikte görünür. Denetçinin imzası bir kez kaydedilir, sonraki raporlara kendiliğinden eklenir.</p>
+          <ul class="liste">
+            <li><svg class="i"><use href="#i-tik"/></svg><span>Denetimin başı ve sonu saatle kaydedilir; isterseniz <b>konum</b> da.</span></li>
+            <li><svg class="i"><use href="#i-tik"/></svg><span>Bulgular şubeye tek dokunuşla <b>WhatsApp</b> mesajı olarak gönderilir.</span></li>
+          </ul>
+        </div>
+        <div class="vitrin belir">
+          <button class="buyut" type="button" data-buyuk="ekran/imzali.webp" data-ad="İmzalar ve rapor metni (örnek)">
+            <span class="tel"><span class="tel-ic"><span class="tel-durum" aria-hidden="true"><span>10:22</span><span><svg viewBox="0 0 26 12"><use href="#i-sinyal"/></svg><svg viewBox="0 0 26 12"><use href="#i-pil"/></svg></span></span><img src="ekran/imzali.webp" alt="Rapor ekranında şube sorumlusunun imzası ve otomatik yazılmış rapor metni" width="780" height="1688" loading="lazy"></span></span>
+          </button>
+          <div class="not-kart nk-sag-ust"><span class="damga">PDF'te görünür</span><b>İmza ve ad soyad</b>Rapor çıktısının altına basılır.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RAPOR ============ -->
+<section id="rapor" class="ayrac">
+  <div class="sar">
+    <div class="bas belir">
+      <span class="kas">Bitir'e basınca</span>
+      <h2>Rapor yazılmış olarak gelir. <span class="sn">PDF'i ve Excel'i de.</span></h2>
+      <p>Uygulama işaretlediğiniz maddelerden, notlarınızdan, kasa ve gönderi sonucundan resmî dilde bir rapor metni yazar. Puanı önceki denetimle karşılaştırır, en zayıf başlığı söyler. Metni dilediğiniz gibi düzeltebilirsiniz; PDF ve Excel düzeltilmiş hâli kullanır.</p>
+    </div>
+    <div class="rapor-izgara">
+      <div class="rapor-tel belir">
+        <div class="ust-yazi"><h3>Rapor metni</h3><p>Kural tabanlı yazılır; yapay zekâ ya da internet gerekmez.</p></div>
+        <button class="buyut" type="button" data-buyuk="ekran/rapor-metni.webp" data-ad="Otomatik yazılmış rapor metni (örnek)">
+          <span class="tel"><span class="tel-ic"><span class="tel-durum" aria-hidden="true"><span>10:20</span><span><svg viewBox="0 0 26 12"><use href="#i-sinyal"/></svg><svg viewBox="0 0 26 12"><use href="#i-pil"/></svg></span></span><img src="ekran/rapor-metni.webp" alt="Otomatik yazılmış rapor metni: tarih, puan, kritik bulgular ve terminler" width="780" height="1688" loading="lazy"></span></span>
+        </button>
+      </div>
+      <div class="cikti-yan">
+        <div class="kagit-kutu belir">
+          <div class="ust-yazi"><h3>PDF rapor</h3><p>Puan, şube bilgileri, rapor metni, başlık puanları, bulgu listesi, kasa ve gönderi sonucu, fotoğraflar ve imzalar. Telefonun yazdırma ekranından PDF olarak kaydedilir.</p></div>
+          <button class="buyut" type="button" data-buyuk="ekran/pdf.webp" data-ad="PDF raporun ilk sayfası (örnek veri)">
+            <div class="kagit"><img src="ekran/pdf.webp" alt="PDF raporun üst kısmı: Şube denetimi raporu, puan 89, şube bilgileri ve rapor metni" width="1588" height="2246" loading="lazy"></div>
+          </button>
+        </div>
+        <div class="excel belir">
+          <div class="ust-yazi"><h3>Excel dosyası</h3><p>Denetim formu, bulgular, başlık puanları, kasa sayımı, gönderi kontrolü ve rapor metni ayrı sayfalarda. Filtreli, sütunları ayarlı.</p></div>
+          <div class="sayfa" aria-label="Excel dosyasının Bulgular sayfası, örnek veri">
+            <div class="sayfa-cubuk"><svg class="i" style="width:15px;height:15px"><use href="#i-tablo"/></svg>Denetim_Kadıköy_Şube.xlsx <b>· örnek veri</b></div>
+            <table>
+              <colgroup><col style="width:7%"><col style="width:19%"><col><col style="width:12%"><col style="width:14%"><col style="width:12%"></colgroup>
+              <thead><tr><th>No</th><th>Kategori</th><th>Bulgu</th><th>Önem</th><th>Termin</th><th>Durum</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>İş Güvenliği</td><td>Acil çıkışlar açık, işaretli ve önü kapalı değil</td><td class="k">Kritik</td><td>12.11.2026</td><td>Açık</td></tr>
+                <tr><td>2</td><td>Kasa ve Tahsilat</td><td>Gün sonu kasa sayımı sistemle uyumlu</td><td class="k">Kritik</td><td>12.11.2026</td><td>Açık</td></tr>
+              </tbody>
+            </table>
+            <div class="sekmeler" aria-hidden="true"><span>Denetim Formu</span><span class="sec">Bulgular</span><span>Başlık Puanları</span><span>Kasa Sayımı</span><span>Gönderi Kontrolü</span><span>Rapor</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SONRASI ============ -->
+<section id="takip" class="ayrac">
+  <div class="sar">
+    <div class="bas belir">
+      <span class="kas">Denetimden sonra</span>
+      <h2>Bulgu kapanana kadar, şube unutulmaz.</h2>
+      <p>Denetim bitince iş bitmiyor: termini yaklaşan bulgular, sıradaki şubeler, haftalık ve aylık rapor. Hepsi aynı uygulamada.</p>
+    </div>
+    <div class="bento">
+      <div class="kutu b-bulgu belir">
+        <div>
+          <span class="etiket">Bulgular ve termin</span>
+          <h3>Her bulgu bir termin tarihiyle takipte.</h3>
+          <p>Termini geçen, yaklaşan, kapanan bulgular ayrı ayrı görünür; arama ve filtre var. Şubeye hatırlatma WhatsApp'tan tek dokunuşla gider. Sonraki denetimde uygun çıkan bulgu kendiliğinden kapanır.</p>
+        </div>
+        <button class="buyut kirpik" type="button" data-buyuk="ekran/bulgular.webp" data-ad="Bulgular: açık, termini geçen, yaklaşan (örnek)">
+          <span class="tel"><span class="tel-ic"><span class="tel-durum" aria-hidden="true"><span>14:10</span><span><svg viewBox="0 0 26 12"><use href="#i-sinyal"/></svg><svg viewBox="0 0 26 12"><use href="#i-pil"/></svg></span></span><img src="ekran/bulgular.webp" alt="Bulgular ekranı: 10 açık bulgu, termini yaklaşanlar ve şubeye hatırlat düğmesi" width="780" height="1688" loading="lazy"></span></span>
+        </button>
+      </div>
+      <div class="kutu b-karne belir">
+        <div style="padding-bottom:28px">
+          <span class="etiket">Şube karnesi</span>
+          <h3>Hangi şube iyiye, hangisi kötüye gidiyor?</h3>
+          <p>Her şubenin puan gidişatı, son puanı, değişimi ve açık bulgu sayısı tek tabloda. Denetim sıklığına göre sıradaki şubeler önerilir.</p>
+        </div>
+        <button class="buyut kirpik" type="button" data-buyuk="ekran/panel-karne.webp" data-ad="Şube karnesi ve sıradaki şubeler (örnek)">
+          <span class="tel"><span class="tel-ic"><img src="ekran/panel-karne.webp" alt="Şube karnesi: üç örnek şubenin puan gidişatı ve açık bulguları" width="780" height="1688" loading="lazy"></span></span>
+        </button>
+      </div>
+      <div class="kutu b-ozet belir">
+        <div style="padding-bottom:28px">
+          <span class="etiket">Haftalık ve aylık rapor</span>
+          <h3>Yöneticiye gidecek özet hazır.</h3>
+          <p>Hafta ya da ay seçin: faaliyet metni, şube sıralaması, en sık bulgular ve Excel dosyası hazırlanır.</p>
+        </div>
+        <button class="buyut kirpik" type="button" data-buyuk="ekran/ozet-siralama.webp" data-ad="Aylık özet: şube sıralaması ve bulgular (örnek)">
+          <span class="tel"><span class="tel-ic"><img src="ekran/ozet-siralama.webp" alt="Aylık özet: şube sıralaması, bulgu dağılımı ve en sık bulgular" width="780" height="1688" loading="lazy"></span></span>
+        </button>
+      </div>
+      <div class="kutu b-aktar belir">
+        <div class="metin">
+          <span class="etiket">Cihazlar arası aktarım</span>
+          <h3>Sahada telefon, ofiste bilgisayar.</h3>
+          <p>Aynı uygulama bilgisayarda geniş ekranla açılır. Kayıtlar tek bir dosyada paketlenir, WhatsApp ya da e-postayla öbür cihaza gider; açınca birleştirilir. Sunucu yok, hiçbir kayıt silinmez.</p>
+          <div class="ok-cizgi" aria-hidden="true"><span>Telefon</span><i></i><span>tek dosya</span><i></i><span>Bilgisayar</span></div>
+        </div>
+        <button class="buyut" type="button" data-buyuk="ekran/masa-panel.webp" data-ad="Bilgisayarda kontrol paneli (örnek veri)">
+          <div class="masa"><div class="cubuk"><i></i><i></i><i></i><span>denetim-cebi / uygulama</span></div><img src="ekran/masa-panel.webp" alt="Denetim Cebi bilgisayarda: kenar menü, kontrol paneli, puan gidişatı ve açık bulgular" width="2560" height="1600" loading="lazy"></div>
+        </button>
+      </div>
+      <div class="kucukler">
+        <div class="kutu belir"><span class="ik"><svg class="i"><use href="#i-kilit"/></svg></span><h3>PIN kilidi</h3><p>Telefonu başkası da kullanıyorsa uygulama açılırken PIN sorar.</p></div>
+        <div class="kutu belir"><span class="ik"><svg class="i"><use href="#i-yazi"/></svg></span><h3>Büyük yazı</h3><p>Güneş altında ve küçük ekranda daha rahat okunur.</p></div>
+        <div class="kutu belir"><span class="ik"><svg class="i"><use href="#i-konum"/></svg></span><h3>Konum kaydı</h3><p>Denetim başında konum kaydedilir; isteğe bağlıdır, kapatılabilir.</p></div>
+        <div class="kutu belir"><span class="ik"><svg class="i"><use href="#i-indir"/></svg></span><h3>Yedek</h3><p>Tüm kayıtlar tek dosyaya yedeklenir, geri yüklenir ya da Excel'e aktarılır.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BİR DENETİM ============ -->
+<section id="akis" class="ayrac">
+  <div class="sar akis-izgara">
+    <div class="bas belir">
+      <span class="kas">Bir denetim, baştan sona</span>
+      <h2>Kadıköy Şube, bir sabah.</h2>
+      <p>Örnek bir ziyaret. Saatler temsilîdir; ekranlar ve sonuçlar uygulamanın bu senaryoda gerçekten ürettikleridir.</p>
+      <p><span class="ornek">Örnek senaryo</span></p>
+    </div>
+    <ol class="zaman">
+      <li class="belir"><time>09:30</time><span class="nokta"><i></i></span><div class="icerik">
+        <h3>Şubeye varış, “Yeni denetim”</h3>
+        <p>Ana sayfa sıradaki şubeleri gösterir. Şube ve denetim türü seçilir; başlangıç saati, isterseniz konum kaydedilir.</p>
+        <div class="damgalar"><span>Şube denetimi</span><span>38 madde</span></div></div></li>
+      <li class="belir"><time>09:34</time><span class="nokta"><i></i></span><div class="icerik">
+        <h3>Liste madde madde</h3>
+        <p>Önceki denetimden açık kalan 4 bulgu turuncu işaretli gelir. Sorunsuz başlıklar “Kalanı uygun” ile geçilir.</p>
+        <div class="damgalar"><span>önceki açık bulgu: 4</span></div></div></li>
+      <li class="belir vurgu"><time>09:52</time><span class="nokta"><i></i></span><div class="icerik">
+        <h3>Arka çıkışın önü kolilerle kapalı</h3>
+        <p>“Uygun değil”, fotoğraf, not. Madde kritik olduğu için termin 3 gün sonrasına kendiliğinden yazılır.</p>
+        <div class="damgalar"><span class="k">Kritik</span><span>Fotoğraf · 09.11 09:52 · Kadıköy Şube</span><span class="t">Termin 12.11</span></div></div></li>
+      <li class="belir vurgu"><time>10:05</time><span class="nokta"><i></i></span><div class="icerik">
+        <h3>Kasa sayımı: ₺40 eksik</h3>
+        <p>Sayılan ₺10.597,50, sistemde ₺10.637,50. Fark kasa maddesine bulgu olarak işlenir.</p>
+        <div class="damgalar"><span class="k">Kasa farkı −₺40,00</span></div></div></li>
+      <li class="belir"><time>10:12</time><span class="nokta"><i></i></span><div class="icerik">
+        <h3>Beş gönderi okutulur</h3>
+        <p>Biri hasarlı ve tutanaksız çıkar; durumu ve notu girilir.</p>
+        <div class="damgalar"><span class="o">4 uygun</span><span class="k">1 hasarlı</span></div></div></li>
+      <li class="belir vurgu"><time>10:20</time><span class="nokta"><i></i></span><div class="icerik">
+        <h3>Bitir: puan 89, rapor hazır</h3>
+        <p>Rapor metni, başlık puanları, PDF ve Excel hazırlanır. Önceki denetimden kalan 4 bulgu bu denetimde uygun çıktığı için kendiliğinden kapanır.</p>
+        <div class="damgalar"><span class="t">89 / 100 · Geliştirilmeli</span><span class="o">4 eski bulgu kapandı</span></div></div></li>
+      <li class="belir"><time>10:22</time><span class="nokta"><i></i></span><div class="icerik">
+        <h3>İmza ve gönderim</h3>
+        <p>Şube sorumlusu ekrana imza atar. PDF ve bulgu listesi WhatsApp'tan şubeye ve yöneticiye gider.</p></div></li>
+      <li class="belir"><time>11.11</time><span class="nokta"><i></i></span><div class="icerik">
+        <h3>Termin yaklaşınca</h3>
+        <p>Ana sayfa ve Bulgular sekmesi termini 2 gün içinde dolan bulguları gösterir; şubeye hatırlatma tek dokunuşla gider.</p></div></li>
+      <li class="belir"><time>Cuma</time><span class="nokta"><i></i></span><div class="icerik">
+        <h3>Haftalık faaliyet raporu</h3>
+        <p>Haftanın denetimleri, şube sıralaması ve bulgular; metin ve Excel olarak yöneticiye.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ GİZLİLİK ============ -->
+<section id="gizlilik" class="ayrac">
+  <div class="sar">
+    <div class="bas orta belir">
+      <span class="kas">Gizlilik ve internetsiz çalışma</span>
+      <h2>Denetim kayıtları telefondan çıkmaz.</h2>
+      <p>Denetim Cebi bir sunucuya bağlanmaz, hesap istemez. Paylaşmak istediğinizde paylaşımı siz başlatırsınız.</p>
+    </div>
+    <div class="ilkeler belir">
+      <div class="ilke"><span class="ik"><svg class="i"><use href="#i-kilit"/></svg></span><h3>Veriler cihazda</h3><p>Denetimler, şubeler ve fotoğraflar telefonun kendi veritabanında saklanır.</p><div class="kanit"><span>js/db.js · IndexedDB, uzak sunucuya istek yok</span></div></div>
+      <div class="ilke"><span class="ik"><svg class="i"><use href="#i-bulut"/></svg></span><h3>İnternetsiz çalışır</h3><p>İlk açılışta dosyalar telefona kaydedilir; şubede çekmese de uygulama açılır, denetim yapılır.</p><div class="kanit"><span>sw.js · uygulama dosyaları önbellekte</span></div></div>
+      <div class="ilke"><span class="ik"><svg class="i"><use href="#i-kisi"/></svg></span><h3>Hesap yok</h3><p>Kayıt olunmaz, giriş yapılmaz. Adınız yalnızca raporlarda görünsün diye telefonda tutulur.</p><div class="kanit"><span>giriş ekranı ve oturum kodu yok</span></div></div>
+      <div class="ilke"><span class="ik"><svg class="i"><use href="#i-paylas"/></svg></span><h3>Paylaşımı siz başlatırsınız</h3><p>PDF, Excel, WhatsApp mesajı ve aktarım paketi yalnızca siz dokunduğunuzda, sizin seçtiğiniz kişiye gider.</p><div class="kanit"><span>telefonun paylaşım ekranı kullanılır</span></div></div>
+    </div>
+    <p class="durust belir"><svg class="i"><use href="#i-uyari"/></svg><span><b>Bilmeniz gereken:</b> Kayıtlar telefonda durduğu için tarayıcı verisini silerseniz ya da telefon kaybolursa kayıtlar da gider. Bu yüzden uygulama düzenli yedek almayı hatırlatır; yedek tek bir dosyadır, istediğiniz yerde saklarsınız.</span></p>
+  </div>
+</section>
+
+<!-- ============ SSS ============ -->
+<section id="sss" class="ayrac">
+  <div class="sar sss">
+    <div class="bas belir">
+      <span class="kas">Sık sorulanlar</span>
+      <h2>Kısa sorular, açık cevaplar.</h2>
+      <p>Başka bir sorunuz varsa ya da uygulamayı şirketinize göre uyarlamak isterseniz bize yazın.</p>
+    </div>
+    <div class="belir">
+      <details class="soru" open><summary>Ücretsiz mi?<i></i></summary><div class="cevap"><p>Evet. Hesap, abonelik ya da reklam yok. Uygulama tarayıcıda çalışır, telefonda ana ekrana eklenerek kullanılır.</p></div></details>
+      <details class="soru"><summary>İnternet gerekir mi?<i></i></summary><div class="cevap"><p>Yalnızca ilk açılışta. Uygulama dosyaları telefona kaydedilir; sonra şubede internet çekmese de açılır ve denetim yapılır. İnternet, raporu WhatsApp ya da e-postayla göndermek istediğinizde gerekir.</p></div></details>
+      <details class="soru"><summary>Nasıl kurulur?<i></i></summary><div class="cevap"><p>Uygulama mağazası gerekmez. Adresi telefonun tarayıcısında açın, sonra ana ekrana ekleyin: <b>Android'de</b> Chrome menüsünden “Ana ekrana ekle” ya da “Uygulamayı yükle”, <b>iPhone'da</b> Safari'de Paylaş düğmesinden “Ana Ekrana Ekle”. Simgesiyle diğer uygulamalar gibi açılır.</p></div></details>
+      <details class="soru"><summary>Veriler nerede duruyor?<i></i></summary><div class="cevap"><p>Yalnızca telefonunuzda, tarayıcının veritabanında. Sunucu olmadığı için kayıtlarınızı Perabayt dahil kimse göremez. Tarayıcı verisi silinirse kayıtlar da silineceğinden uygulama yedek almayı hatırlatır.</p></div></details>
+      <details class="soru"><summary>Telefonum değişirse ne olur?<i></i></summary><div class="cevap"><p>Ayarlar'daki <b>Cihazlar arası aktarım</b> kayıtları (isterseniz fotoğraflarla) tek bir dosyada paketler. Dosyayı WhatsApp ya da e-postayla yeni telefona gönderip açarsınız; kayıtlar birleştirilir, hiçbiri silinmez. Aynı yolla telefondan bilgisayara da taşıyabilirsiniz.</p></div></details>
+      <details class="soru"><summary>PDF ve Excel nasıl alınır?<i></i></summary><div class="cevap"><p>Rapor ekranında <b>PDF / Yazdır</b> telefonun yazdırma ekranını açar; oradan PDF olarak kaydedilir ya da yazdırılır. <b>Excel'i aç</b> ve <b>Excel'i paylaş</b> denetim formu, bulgular, başlık puanları, kasa, gönderi ve rapor sayfalarından oluşan bir dosya hazırlar. Haftalık, aylık özet ve tüm kayıtlar da Excel'e aktarılır.</p></div></details>
+      <details class="soru"><summary>Kendi kontrol listemizi kullanabilir miyiz?<i></i></summary><div class="cevap"><p>Evet. Ayarlar'dan madde ekleyip düzenleyebilir, yeni denetim türü açabilir ya da “Kategori, Madde, Önem” sütunlu bir Excel dosyasından liste yükleyebilirsiniz.</p><p>Şirketinize özel puanlama, rapor dili, marka ya da birden çok denetçiyi bir araya getiren bir yapı gerekiyorsa <b>Perabayt uygulamayı sizin için uyarlar.</b></p></div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ KAPANIŞ ============ -->
+<section class="kapanis" id="iletisim">
+  <div class="sar">
+    <div class="bant belir">
+      <img src="uygulama/icons/icon-192.png" alt="" width="64" height="64">
+      <h2>Denetim Cebi'ni şirketinize uyarlayalım.</h2>
+      <p>Kendi kontrol listeniz, puanlamanız ve rapor diliniz; sahadaki ekibinizin kullanacağı biçimde. Ne istediğinizi anlatın, birlikte bakalım.</p>
+      <div class="eylem">
+        <a class="btn ana" href="https://perabayt-new.vercel.app/iletisim">Bizimle görüşün <svg class="i ok"><use href="#i-ok"/></svg></a>
+        <a class="btn" href="https://perabayt-new.vercel.app/urunler#konsept">Diğer çalışmalarımız</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="sar">
+    <div class="imza"><img src="uygulama/icons/icon.svg" alt="" width="30" height="30"><div><b>Denetim Cebi</b>Perabayt tarafından tasarlandı ve geliştirildi · Konsept çalışma</div></div>
+    <nav aria-label="Alt bağlantılar"><a href="uygulama/">Uygulamayı aç</a><a href="#ozellikler">Özellikler</a><a href="#sss">SSS</a><a href="https://perabayt-new.vercel.app/urunler#konsept">Diğer çalışmalarımız</a></nav>
+  </div>
+</footer>
+
+<dialog id="buyuk" aria-label="Büyük görüntü">
+  <button class="kapat" type="button" aria-label="Kapat"><svg class="i"><use href="#i-x"/></svg></button>
+  <div class="kutu-g"><img alt=""></div>
+  <p></p>
+</dialog>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var az = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---- üst çubuk ve bölüm vurgusu ---- */
+  var ust = $("#ust");
+  var navA = [].slice.call(document.querySelectorAll(".ust nav a"));
+  function kaydi() { ust.classList.toggle("kaydi", scrollY > 8); }
+  addEventListener("scroll", kaydi, { passive: true }); kaydi();
+  if ("IntersectionObserver" in window) {
+    var bo = new IntersectionObserver(function (gir) {
+      gir.forEach(function (g) {
+        if (!g.isIntersecting) return;
+        navA.forEach(function (a) { a.classList.toggle("aktif", a.getAttribute("href") === "#" + g.target.id); });
+      });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    navA.forEach(function (a) { var s = document.querySelector(a.getAttribute("href")); if (s) bo.observe(s); });
+    var io = new IntersectionObserver(function (gir) {
+      gir.forEach(function (g) { if (g.isIntersecting) { g.target.classList.add("gorundu"); io.unobserve(g.target); } });
+    }, { rootMargin: "0px 0px -8% 0px" });
+    document.querySelectorAll(".belir").forEach(function (el) { io.observe(el); });
+  } else {
+    document.querySelectorAll(".belir").forEach(function (el) { el.classList.add("gorundu"); });
+  }
+
+  /* ---- uygulamanın eski konumundan (kök) kalmış bir hizmet çalışanı varsa kaldır ---- */
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.getRegistrations().then(function (rs) {
+      rs.forEach(function (r) { if (/\/denetim-cebi\/$/.test(r.scope)) r.unregister(); });
+    }).catch(function () {});
+  }
+
+  /* ---- canlı telefon: ölçek ---- */
+  var ekran = $("#ekran"), uyg = $("#uyg"), parmak = $("#parmak");
+  var olcek = 1;
+  function olcekle() {
+    olcek = ekran.clientWidth / 390;
+    uyg.style.transform = "scale(" + olcek + ")";
+  }
+  olcekle();
+  if ("ResizeObserver" in window) new ResizeObserver(olcekle).observe(ekran); else addEventListener("resize", olcekle);
+
+  /* ---- tanıtım ---- */
+  var ADRES = "uygulama/?tanitim#/";
+  var adimLi = [].slice.call(document.querySelectorAll("#adimlar li"));
+  var ANLAT = ["", "Örnek şubeler yükleniyor", "Kadıköy Şube için denetim başlıyor", "Kontrol listesi işaretleniyor", "Uygunsuz madde: fotoğraf ve not", "Kasa sayımı ve fark", "Rapor hazır, şube sorumlusu imzalıyor"];
+  var anlatim = $("#anlatim");
+  function adim(n) {
+    adimLi.forEach(function (li, i) { li.classList.toggle("gecti", i + 1 < n); li.classList.toggle("simdi", i + 1 === n); });
+    anlatim.innerHTML = n ? "<b>" + n + "/6</b> · " + ANLAT[n] : "";
+  }
+  var durumEl = $("#durum"), durumYazi = $("#durum-yazi"), durumDugme = $("#durum-dugme");
+  var METIN = {
+    hazir: ["Canlı uygulama · örnek veri", "Tanıtımı oynat", "i-oynat"],
+    oynuyor: [matchMedia("(max-width: 640px)").matches ? "Tanıtım oynuyor · denemek için çerçeveye dokunun" : "Tanıtım oynuyor · dokunduğunuz an kontrol sizde", "", ""],
+    sizde: ["Kontrol sizde · örnek veriyle gezinin", "Baştan oynat", "i-yenile"],
+    bitti: ["Tanıtım bitti · uygulamayı gezmeye devam edin", "Baştan oynat", "i-yenile"]
+  };
+  function durumYaz(d) {
+    var m = METIN[d]; durumEl.dataset.d = d; durumYazi.textContent = m[0];
+    durumDugme.hidden = !m[1];
+    if (m[1]) durumDugme.innerHTML = '<svg class="i"><use href="#' + m[2] + '"/></svg>' + m[1];
+  }
+  var demo = { calisiyor: false, iptal: false, zaman: [], kusak: 0 };
+  function bekle(ms) {
+    var k = demo.kusak;
+    return new Promise(function (ok, red) {
+      var t = setTimeout(function () { (demo.iptal || k !== demo.kusak) ? red("iptal") : ok(); }, az ? Math.min(ms, 350) : ms);
+      demo.zaman.push(t);
+    });
+  }
+  function belge() { try { return uyg.contentDocument; } catch (_) { return null; } }
+  function pen() { try { return uyg.contentWindow; } catch (_) { return null; } }
+  function bul(sel, sure) {
+    var son = Date.now() + (sure || 8000), k = demo.kusak;
+    return new Promise(function (ok, red) {
+      (function dene() {
+        if (demo.iptal || k !== demo.kusak) return red("iptal");
+        var d = belge(), el = d && d.querySelector(sel);
+        if (el) return ok(el);
+        if (Date.now() > son) return red("bulunamadı: " + sel);
+        demo.zaman.push(setTimeout(dene, 120));
+      })();
+    });
+  }
+  function parmakGit(el) {
+    var r = el.getBoundingClientRect();
+    var x = (r.left + r.width / 2) * olcek, y = (r.top + r.height / 2) * olcek;
+    parmak.classList.add("gor");
+    parmak.style.transform = "translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px)";
+  }
+  // Çerçevenin içinde kaydır (scrollIntoView dış sayfayı da kaydırırdı).
+  function kapsayici(el) {
+    var w = pen();
+    for (var p = el.parentElement; p && p !== el.ownerDocument.body; p = p.parentElement) {
+      var o = w.getComputedStyle(p).overflowY;
+      if ((o === "auto" || o === "scroll") && p.scrollHeight > p.clientHeight + 2) return p;
+    }
+    return null;
+  }
+  function merkezle(el, ust) {
+    var w = pen(), r = el.getBoundingClientRect(), k = kapsayici(el), dav = az ? "auto" : "smooth";
+    if (k) {
+      var kr = k.getBoundingClientRect();
+      var hedef = k.scrollTop + (r.top - kr.top) - (ust != null ? ust : (kr.height - r.height) / 2);
+      k.scrollTo({ top: Math.max(0, hedef), behavior: dav });
+    } else {
+      var y = w.scrollY + r.top - (ust != null ? ust : (w.innerHeight - r.height) / 2);
+      w.scrollTo({ top: Math.max(0, y), behavior: dav });
+    }
+  }
+  async function gorunur(el) {
+    var w = pen(), r = el.getBoundingClientRect(), k = kapsayici(el);
+    var ust = k ? k.getBoundingClientRect().top : 0, alt = k ? k.getBoundingClientRect().bottom : w.innerHeight;
+    if (r.top < ust + 70 || r.bottom > alt - 90) { merkezle(el); await bekle(650); }
+  }
+  async function dokun(el, tikla) {
+    if (!el) return;
+    await gorunur(el);
+    parmakGit(el); await bekle(750);
+    parmak.classList.remove("bas"); void parmak.offsetWidth; parmak.classList.add("bas");
+    await bekle(160);
+    if (tikla !== false) el.click();
+  }
+  function olay(el, tur) { var w = pen(); el.dispatchEvent(new w.Event(tur, { bubbles: true })); }
+  async function yaz(el, metin, hiz) {
+    var bas = el.value ? el.value : "";
+    for (var i = 1; i <= metin.length; i++) {
+      el.value = bas + metin.slice(0, i);
+      olay(el, "input");
+      await bekle(hiz || 38);
+    }
+    olay(el, "change");
+  }
+  async function kaydir(y) {
+    var w = pen(); w.scrollTo({ top: y, behavior: az ? "auto" : "smooth" }); await bekle(900);
+  }
+  async function imzaAt(cv) {
+    var w = pen(), r = cv.getBoundingClientRect();
+    cv.setPointerCapture = function () {};
+    var P = function (fx, fy) { return { clientX: r.left + r.width * fx, clientY: r.top + r.height * fy, pointerId: 7, bubbles: true }; };
+    async function cizgi(n) {
+      cv.dispatchEvent(new w.PointerEvent("pointerdown", P(n[0][0], n[0][1])));
+      for (var i = 1; i < n.length; i++) {
+        cv.dispatchEvent(new w.PointerEvent("pointermove", P(n[i][0], n[i][1])));
+        if (i % 3 === 0) await bekle(16);
+      }
+      cv.dispatchEvent(new w.PointerEvent("pointerup", P(n[n.length - 1][0], n[n.length - 1][1])));
+    }
+    var a = [], b = [], c = [], t;
+    for (t = 0; t <= 1; t += 0.02) a.push([0.12 + 0.16 * t, 0.72 - 0.42 * Math.abs(Math.sin(t * Math.PI * 2)) * (t < 0.5 ? 1 : 0.85)]);
+    for (t = 0; t <= 1; t += 0.008) b.push([0.3 + 0.5 * t + 0.035 * Math.cos(t * Math.PI * 10 + Math.PI), 0.6 - 0.13 * Math.sin(t * Math.PI * 10) * (1 - 0.4 * t) - 0.05 * t]);
+    for (t = 0; t <= 1; t += 0.04) c.push([0.16 + 0.7 * t, 0.8 - 0.06 * t - 0.03 * Math.sin(t * Math.PI)]);
+    await cizgi(a); await cizgi(b); await cizgi(c);
+  }
+  async function fotoEkle(item) {
+    var w = pen(), inp = item.querySelector('input[type=file][multiple]');
+    if (!inp || !window.ornekFoto) return;
+    var f = await window.ornekFoto(w);
+    var dt = new w.DataTransfer(); dt.items.add(f);
+    inp.files = dt.files;
+    olay(inp, "change");
+  }
+
+  async function oynat() {
+    if (demo.calisiyor) return;
+    demo.iptal = false; demo.calisiyor = true; demo.zaman = [];
+    durumYaz("oynuyor");
+    try {
+      var d, el;
+      adim(1);
+      el = await bul('[data-act="loadDemo"]');
+      await bekle(1100);
+      await dokun(el);
+      await bul(".v-dash");
+      await bekle(1300);
+      await kaydir(560); await bekle(900); await kaydir(0); await bekle(400);
+
+      adim(2);
+      await dokun(await bul('.hero [data-act="newAudit"]'));
+      el = await bul('.sheet-wrap.in .bp-r[data-b="demo-b1"]');
+      await bekle(1000);
+      await dokun(el);
+      await bul(".v-audit");
+      await bekle(1100);
+
+      adim(3);
+      await dokun(await bul('#ch-0 [data-act="catOk"]'));
+      await bekle(700);
+      d = belge();
+      var maddeler = [].slice.call(d.querySelectorAll("#cat-1 .item")).map(function (x) { return x.id; });
+      await dokun(d.querySelector("#" + maddeler[0] + ' [data-r="ok"]'));
+      await bekle(400);
+
+      adim(4);
+      await dokun(belge().querySelector("#" + maddeler[1] + ' [data-r="nok"]'));
+      await bekle(700);
+      el = await bul("#" + maddeler[1] + " textarea");
+      await dokun(belge().querySelector("#" + maddeler[1] + ' [data-act="mic"]') || el, false);
+      await yaz(el, "Arka çıkışın önüne devir kolileri istiflenmiş");
+      await bekle(500);
+      el = belge().querySelector("#" + maddeler[1] + ' .qn-c[data-t="Personel bilgilendirildi"]');
+      if (el) { await dokun(el); await bekle(500); }
+      el = belge().querySelector("#" + maddeler[1] + " .addph");
+      if (el) { await dokun(el, false); await fotoEkle(belge().getElementById(maddeler[1])); }
+      await bul("#" + maddeler[1] + " .photos img, #" + maddeler[1] + " .photos .th", 5000).catch(function () {});
+      await bekle(1500);
+      await dokun(belge().querySelector("#" + maddeler[2] + ' [data-r="ok"]'));
+      await bekle(500);
+      // kalan başlıklar: birkaçı görünür, gerisi hızlıca
+      for (var i = 0; i < 12; i++) {
+        el = belge().querySelector('.cat-head [data-act="catOk"]');
+        if (!el) break;
+        if (i < 2) { await dokun(el); await bekle(450); } else { el.click(); await bekle(60); }
+      }
+
+      adim(5);
+      await dokun(await bul('#tools [data-act="cash"]'));
+      await bul(".sheet-wrap.in [data-d]");
+      await bekle(600);
+      var sayim = [[200, "38"], [100, "21"], [50, "12"], [20, "9"], [10, "6"], [5, "4"]];
+      for (var j = 0; j < sayim.length; j++) {
+        el = belge().querySelector('.sheet-wrap [data-d="' + sayim[j][0] + '"]');
+        if (j < 3) { parmakGit(el); await bekle(380); }
+        await yaz(el, sayim[j][1], 90);
+      }
+      el = belge().querySelector(".sheet-wrap [data-other]"); await yaz(el, "37,50", 60);
+      el = belge().querySelector(".sheet-wrap [data-sys]");
+      await gorunur(el); parmakGit(el); await bekle(450);
+      await yaz(el, "10.637,50", 70);
+      await bekle(1700);
+      await dokun(belge().querySelector(".sheet-wrap [data-ok]"));
+      await bekle(900);
+
+      adim(6);
+      await dokun(await bul('.finishbar [data-act="finish"]'));
+      await bekle(600);
+      el = belge().querySelector(".sheet-wrap.in [data-ok]");
+      if (el) await dokun(el);
+      await bul(".v-report");
+      parmak.classList.remove("gor");
+      await bekle(1800);
+      el = belge().querySelector(".v-report .o4");
+      if (el) { merkezle(el, 70); await bekle(2600); }
+      await dokun(await bul('[data-act="signMgr"]'));
+      el = await bul(".sheet-wrap.in canvas.sign-pad");
+      await bekle(700);
+      parmakGit(el);
+      await imzaAt(el);
+      await bekle(600);
+      await dokun(belge().querySelector(".sheet-wrap [data-ok]"));
+      await bekle(1000);
+      parmak.classList.remove("gor");
+      await kaydir(0);
+      adim(7);
+      demo.calisiyor = false; durumYaz("bitti");
+    } catch (e) {
+      demo.calisiyor = false;
+      parmak.classList.remove("gor");
+      if (e !== "iptal") { durumYaz("sizde"); }
+    }
+  }
+  function devral() {
+    if (!demo.calisiyor) return;
+    demo.iptal = true; demo.calisiyor = false; demo.kusak++;
+    demo.zaman.forEach(clearTimeout); demo.zaman = [];
+    parmak.classList.remove("gor");
+    adim(0);
+    durumYaz("sizde");
+  }
+  function dinle() {
+    var d = belge(); if (!d || d.__dinleniyor) return;
+    d.__dinleniyor = true;
+    // Uygulamanın kendi scrollIntoView çağrıları da yalnızca çerçevenin içini kaydırsın.
+    try {
+      pen().Element.prototype.scrollIntoView = function (o) {
+        var b = o && typeof o === "object" ? o.block : (o === false ? "end" : "start");
+        var r = this.getBoundingClientRect(), w = pen();
+        if (b === "nearest" && r.top >= 0 && r.bottom <= w.innerHeight) return;
+        merkezle(this, b === "start" ? 70 : null);
+      };
+    } catch (_) {}
+    ["pointerdown", "keydown", "wheel", "touchstart"].forEach(function (t) {
+      d.addEventListener(t, function (e) { if (e.isTrusted) devral(); }, { passive: true, capture: true });
+    });
+  }
+  uyg.addEventListener("load", dinle);
+
+  // Tanıtımın veritabanını sıfırla, uygulamayı yeniden yükle.
+  function sifirla() {
+    return new Promise(function (ok) {
+      var bitti = false, son = function () { if (!bitti) { bitti = true; ok(); } };
+      var bos = function () {
+        uyg.removeEventListener("load", bos);
+        try {
+          var r = indexedDB.deleteDatabase("denetim-cebi-tanitim");
+          r.onsuccess = r.onerror = r.onblocked = son;
+        } catch (_) { son(); }
+        setTimeout(son, 1500);
+      };
+      if (uyg.getAttribute("src")) { uyg.addEventListener("load", bos); uyg.src = "about:blank"; } else bos();
+    }).then(function () {
+      return new Promise(function (ok) {
+        var yuk = function () { uyg.removeEventListener("load", yuk); ok(); };
+        uyg.addEventListener("load", yuk);
+        uyg.src = ADRES;
+      });
+    });
+  }
+  async function sessizHazirla() {
+    // hareket azaltılmışsa: örnek veriyi yükle, panel hazır dursun
+    try {
+      var el = await bul('[data-act="loadDemo"]');
+      el.click();
+    } catch (_) {}
+  }
+  function bastan() {
+    demo.iptal = true; demo.kusak++;
+    demo.zaman.forEach(clearTimeout); demo.zaman = [];
+    demo.calisiyor = false; parmak.classList.remove("gor"); adim(0);
+    sifirla().then(function () { demo.iptal = false; oynat(); });
+  }
+  durumDugme.addEventListener("click", function () {
+    if (durumEl.dataset.d === "hazir" && !belge().querySelector(".v-dash")) oynat(); else bastan();
+  });
+
+  var basladi = false;
+  durumYaz("hazir");
+  sifirla().then(function () {
+    if (az) { sessizHazirla(); return; }
+    if ("IntersectionObserver" in window) {
+      var po = new IntersectionObserver(function (g) {
+        if (g[0].isIntersecting && !basladi) { basladi = true; po.disconnect(); oynat(); }
+      }, { threshold: 0.35 });
+      po.observe(ekran);
+    } else { basladi = true; oynat(); }
+  });
+  window.__tanitim = { durum: function () { return durumEl.dataset.d; }, adim: function () { var s = document.querySelector("#adimlar li.simdi"); return s ? adimLi.indexOf(s) + 1 : 0; } };
+
+  /* ---- büyük görüntü ---- */
+  var dlg = $("#buyuk");
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-buyuk]");
+    if (!b || !dlg.showModal) return;
+    var img = dlg.querySelector("img"), kaynak = b.querySelector("img");
+    img.src = b.dataset.buyuk; img.alt = kaynak ? kaynak.alt : "";
+    img.classList.toggle("uzun", /pdf/.test(b.dataset.buyuk));
+    dlg.querySelector("p").textContent = b.dataset.ad || "";
+    dlg.showModal();
+  });
+  dlg.addEventListener("click", function (e) { if (e.target === dlg || e.target.closest(".kapat")) dlg.close(); });
+})();
+</script>
+</body>
+</html>
